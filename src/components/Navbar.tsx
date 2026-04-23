@@ -46,13 +46,18 @@ export default function Navbar() {
 
         {/* Links */}
         <div className="hidden md:flex items-center gap-10">
-          {["Louer un espace", "Mettre en location", "Comment ça marche", "Tarifs"].map((link) => (
+          {[
+            { label: "Louer un espace", href: "/espaces" },
+            { label: "Mettre en location", href: "/publier" },
+            { label: "Comment ça marche", href: "/#how-it-works" },
+            { label: "Tarifs", href: "/#tarifs" },
+          ].map(({ label, href }) => (
             <a
-              key={link}
-              href="#"
+              key={label}
+              href={href}
               className="text-sm font-medium text-dp-cream/60 hover:text-dp-cream transition-colors duration-200"
             >
-              {link}
+              {label}
             </a>
           ))}
         </div>
