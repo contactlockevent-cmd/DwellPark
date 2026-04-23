@@ -1,71 +1,38 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SearchBar from "@/components/SearchBar";
+import CategoryNav from "@/components/CategoryNav";
 import ListingCard from "@/components/ListingCard";
-import { listings, SPACE_TYPES, CITIES, type SpaceType } from "@/lib/data";
+import SkeletonCard from "@/components/SkeletonCard";
+import { listings, type SpaceType } from "@/lib/data";
 
-function SearchIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
-    </svg>
+function EspacesContent() {
+  const searchParams = useSearchParams();
+
+  const [search, setSearch] = useState(searchParams.get("q") ?? "");
+  const [selectedType, setSelectedType] = useState<SpaceType | "">(
+    (searchParams.get("type") as SpaceType) ?? ""
   );
-}
-
-function SlidersIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <line x1="4" y1="21" x2="4" y2="14" /><line x1="4" y1="10" x2="4" y2="3" />
-      <line x1="12" y1="21" x2="12" y2="12" /><line x1="12" y1="8" x2="12" y2="3" />
-      <line x1="20" y1="21" x2="20" y2="16" /><line x1="20" y1="12" x2="20" y2="3" />
-      <line x1="1" y1="14" x2="7" y2="14" /><line x1="9" y1="8" x2="15" y2="8" />
-      <line x1="17" y1="16" x2="23" y2="16" />
-    </svg>
+  const [maxPrice, setMaxPrice] = useState(
+    searchParams.get("budget") ? Number(searchParams.get("budget")) : 300
   );
-}
-
-function CloseIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-    </svg>
-  );
-}
-
-export default function EspacesPage() {
-  const [search, setSearch] = useState("");
-  const [selectedCity, setSelectedCity] = useState("Toutes les villes");
-  const [selectedTypes, setSelectedTypes] = useState<SpaceType[]>([]);
-  const [maxPrice, setMaxPrice] = useState(300);
   const [sortBy, setSortBy] = useState<"price" | "rating" | "surface">("rating");
   const [showFilters, setShowFilters] = useState(false);
-
-  const activeFilterCount =
-    selectedTypes.length +
-    (selectedCity !== "Toutes les villes" ? 1 : 0) +
-    (maxPrice < 300 ? 1 : 0);
-
-  const hasActiveFilters = activeFilterCount > 0 || !!search;
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    document.body.style.overflow = showFilters ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
-  }, [showFilters]);
+    const t = setTimeout(() => setLoading(false), 600);
+    return () => clearTimeout(t);
+  }, []);
 
-  const toggleType = (type: SpaceType) => {
-    setSelectedTypes((prev) =>
-      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
-    );
-  };
-
-  const resetFilters = () => {
-    setSelectedTypes([]);
-    setSelectedCity("Toutes les villes");
-    setSearch("");
-    setMaxPrice(300);
-  };
+  const activeFilterCount =
+    (selectedType ? 1 : 0) +
+    (maxPrice < 300 ? 1 : 0) +
+    (search ? 1 : 0);
 
   const filtered = useMemo(() => {
     return listings
@@ -75,46 +42,33 @@ export default function EspacesPage() {
           l.title.toLowerCase().includes(search.toLowerCase()) ||
           l.location.toLowerCase().includes(search.toLowerCase()) ||
           l.city.toLowerCase().includes(search.toLowerCase());
-        const matchCity = selectedCity === "Toutes les villes" || l.city === selectedCity;
-        const matchType = selectedTypes.length === 0 || selectedTypes.includes(l.type);
+        const matchType = !selectedType || l.type === selectedType;
         const matchPrice = l.price <= maxPrice;
-        return matchSearch && matchCity && matchType && matchPrice;
+        return matchSearch && matchType && matchPrice;
       })
       .sort((a, b) => {
         if (sortBy === "price") return a.price - b.price;
         if (sortBy === "rating") return b.rating - a.rating;
         return b.surface - a.surface;
       });
-  }, [search, selectedCity, selectedTypes, maxPrice, sortBy]);
+  }, [search, selectedType, maxPrice, sortBy]);
+
+  useEffect(() => {
+    document.body.style.overflow = showFilters ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [showFilters]);
+
+  function resetFilters() {
+    setSearch("");
+    setSelectedType("");
+    setMaxPrice(300);
+  }
+
+  const hasActiveFilters = activeFilterCount > 0;
 
   const FilterContent = (
     <div className="space-y-8">
-      {/* Types */}
-      <div>
-        <div
-          className="text-[10px] text-dp-cream/40 tracking-[0.2em] uppercase mb-4"
-          style={{ fontFamily: "var(--font-mono)" }}
-        >
-          Type d'espace
-        </div>
-        <div className="space-y-2">
-          {SPACE_TYPES.map((type) => (
-            <button
-              key={type}
-              onClick={() => toggleType(type)}
-              className={`w-full text-left px-4 py-3 rounded-xl text-[14px] font-medium transition-all duration-200 border ${
-                selectedTypes.includes(type)
-                  ? "bg-dp-orange/10 border-dp-orange/40 text-dp-orange"
-                  : "bg-dp-ocean/20 border-dp-cream/15 text-dp-cream/70 hover:border-dp-cream/30"
-              }`}
-            >
-              {type}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Price */}
+      {/* Budget */}
       <div>
         <div
           className="text-[10px] text-dp-cream/40 tracking-[0.2em] uppercase mb-4"
@@ -127,7 +81,7 @@ export default function EspacesPage() {
             className="font-display text-[28px] text-dp-orange tracking-tight"
             style={{ fontFamily: "var(--font-display)" }}
           >
-            {maxPrice}€
+            {maxPrice === 300 ? "300€+" : `${maxPrice}€`}
           </span>
         </div>
         <input
@@ -140,7 +94,36 @@ export default function EspacesPage() {
           className="w-full accent-dp-orange"
         />
         <div className="flex justify-between text-[11px] text-dp-cream/30 mt-1" style={{ fontFamily: "var(--font-mono)" }}>
-          <span>50€</span><span>300€</span>
+          <span>50€</span><span>Sans limite</span>
+        </div>
+      </div>
+
+      {/* Sort */}
+      <div>
+        <div
+          className="text-[10px] text-dp-cream/40 tracking-[0.2em] uppercase mb-4"
+          style={{ fontFamily: "var(--font-mono)" }}
+        >
+          Trier par
+        </div>
+        <div className="space-y-2">
+          {(["rating", "price", "surface"] as const).map((opt) => {
+            const labels = { rating: "Mieux notés", price: "Prix croissant", surface: "Plus grand" };
+            return (
+              <button
+                key={opt}
+                onClick={() => setSortBy(opt)}
+                className={[
+                  "w-full text-left px-4 py-3 rounded-xl text-[14px] font-medium transition-all duration-150 border",
+                  sortBy === opt
+                    ? "bg-dp-orange/10 border-dp-orange/35 text-dp-orange"
+                    : "bg-dp-ocean/20 border-dp-cream/12 text-dp-cream/65 hover:border-dp-cream/25 hover:text-dp-cream",
+                ].join(" ")}
+              >
+                {labels[opt]}
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -148,7 +131,7 @@ export default function EspacesPage() {
       {hasActiveFilters && (
         <button
           onClick={resetFilters}
-          className="text-[12px] text-dp-orange/70 hover:text-dp-orange transition-colors underline underline-offset-4"
+          className="text-[12px] text-dp-orange/65 hover:text-dp-orange transition-colors underline underline-offset-4"
         >
           Réinitialiser les filtres
         </button>
@@ -163,9 +146,10 @@ export default function EspacesPage() {
 
       {/* Search hero */}
       <div
-        className="pt-28 pb-12 relative"
+        className="pt-28 pb-8"
         style={{
-          background: "radial-gradient(ellipse at top, rgba(42,85,128,0.18) 0%, transparent 65%), linear-gradient(180deg, #061A2F 0%, #0A2540 100%)",
+          background:
+            "radial-gradient(ellipse at top, rgba(42,85,128,0.18) 0%, transparent 65%), linear-gradient(180deg, #061A2F 0%, #0A2540 100%)",
         }}
       >
         <div className="max-w-[1400px] mx-auto px-4 sm:px-8">
@@ -184,40 +168,38 @@ export default function EspacesPage() {
           </h1>
 
           {/* Search bar */}
-          <div className="flex flex-col sm:flex-row gap-3 max-w-[820px]">
-            <div className="relative flex-1">
-              <div className="absolute left-5 top-1/2 -translate-y-1/2 text-dp-cream/40">
-                <SearchIcon />
-              </div>
-              <input
-                type="text"
-                placeholder="Ville, quartier, type d'espace..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-13 pr-6 py-4 rounded-2xl bg-dp-ocean/40 border border-dp-cream/10 text-dp-cream placeholder:text-dp-cream/35 text-[15px] outline-none focus:border-dp-orange/50 transition-colors backdrop-blur-xl"
-              />
-            </div>
-            <select
-              value={selectedCity}
-              onChange={(e) => setSelectedCity(e.target.value)}
-              className="px-5 py-4 rounded-2xl bg-dp-ocean/40 border border-dp-cream/10 text-dp-cream text-[14px] outline-none focus:border-dp-orange/50 transition-colors backdrop-blur-xl cursor-pointer"
-            >
-              {CITIES.map((c) => (
-                <option key={c} value={c} className="bg-dp-deep">{c}</option>
-              ))}
-            </select>
-          </div>
+          <SearchBar
+            className="max-w-[860px]"
+            defaultLocation={search}
+            defaultType={selectedType}
+            defaultBudget={maxPrice}
+            onSearch={({ location, type, budget }) => {
+              setSearch(location);
+              setSelectedType(type);
+              setMaxPrice(budget);
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Category nav */}
+      <div className="bg-dp-deep border-b border-dp-cream/6 sticky top-20 z-40">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-8">
+          <CategoryNav
+            active={selectedType}
+            onChange={(type) => setSelectedType(type)}
+          />
         </div>
       </div>
 
       {/* Main content */}
-      <div className="flex-1 bg-dp-deep py-12">
+      <div className="bg-dp-deep py-10">
         <div className="max-w-[1400px] mx-auto px-4 sm:px-8">
           <div className="flex gap-8">
 
-            {/* Sidebar filters — desktop only */}
-            <aside className="hidden lg:block w-[260px] flex-shrink-0">
-              <div className="sticky top-28">
+            {/* Sidebar — desktop */}
+            <aside className="hidden lg:block w-[240px] flex-shrink-0">
+              <div className="sticky top-36">
                 {FilterContent}
               </div>
             </aside>
@@ -226,34 +208,38 @@ export default function EspacesPage() {
             <div className="flex-1 min-w-0">
               {/* Toolbar */}
               <div className="flex justify-between items-center mb-8 gap-3">
+                <p className="text-[14px] text-dp-cream/55">
+                  {loading ? (
+                    <span className="inline-block w-32 h-4 bg-dp-ocean/30 rounded-full animate-pulse" />
+                  ) : (
+                    <>
+                      <span className="text-dp-cream font-semibold">{filtered.length}</span>
+                      {" "}espace{filtered.length > 1 ? "s" : ""} disponible{filtered.length > 1 ? "s" : ""}
+                    </>
+                  )}
+                </p>
                 <div className="flex items-center gap-3">
-                  <div className="w-1.5 h-1.5 rounded-full bg-dp-orange flex-shrink-0" />
-                  <span className="text-[14px] text-dp-cream/60">
-                    <span className="text-dp-cream font-semibold">{filtered.length}</span> espace{filtered.length > 1 ? "s" : ""} disponible{filtered.length > 1 ? "s" : ""}
-                  </span>
-                </div>
-                <div className="flex items-center gap-3">
-                  {/* Mobile filter button */}
+                  {/* Mobile filter */}
                   <button
                     onClick={() => setShowFilters(true)}
-                    className="lg:hidden relative flex items-center gap-2 px-4 py-2.5 rounded-xl border border-dp-cream/15 text-dp-cream/70 text-[13px] font-medium hover:border-dp-cream/30 transition-colors"
+                    className="lg:hidden relative flex items-center gap-2 px-4 py-2.5 rounded-xl border border-dp-cream/15 text-dp-cream/65 text-[13px] font-medium hover:border-dp-cream/30 transition-colors"
                   >
-                    <SlidersIcon />
-                    <span>Filtres</span>
+                    <FiltersIcon />
+                    Filtres
                     {activeFilterCount > 0 && (
-                      <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-dp-orange text-dp-abyss text-[9px] font-bold flex items-center justify-center leading-none">
+                      <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-dp-orange text-dp-abyss text-[9px] font-bold flex items-center justify-center">
                         {activeFilterCount}
                       </span>
                     )}
                   </button>
 
-                  {/* Sort — desktop */}
-                  <div className="hidden lg:flex items-center gap-3 text-dp-cream/60">
-                    <SlidersIcon />
+                  {/* Sort desktop */}
+                  <div className="hidden lg:flex items-center gap-2 text-dp-cream/50 text-[13px]">
+                    <FiltersIcon />
                     <select
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-                      className="bg-transparent text-dp-cream/60 text-[13px] outline-none cursor-pointer"
+                      className="bg-transparent text-dp-cream/55 text-[13px] outline-none cursor-pointer hover:text-dp-cream transition-colors"
                     >
                       <option value="rating" className="bg-dp-deep">Mieux notés</option>
                       <option value="price" className="bg-dp-deep">Prix croissant</option>
@@ -261,11 +247,11 @@ export default function EspacesPage() {
                     </select>
                   </div>
 
-                  {/* Sort — mobile */}
+                  {/* Sort mobile */}
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-                    className="lg:hidden bg-transparent text-dp-cream/60 text-[13px] outline-none cursor-pointer"
+                    className="lg:hidden bg-transparent text-dp-cream/55 text-[13px] outline-none cursor-pointer"
                   >
                     <option value="rating" className="bg-dp-deep">Mieux notés</option>
                     <option value="price" className="bg-dp-deep">Prix croissant</option>
@@ -275,7 +261,11 @@ export default function EspacesPage() {
               </div>
 
               {/* Grid */}
-              {filtered.length > 0 ? (
+              {loading ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)}
+                </div>
+              ) : filtered.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                   {filtered.map((listing) => (
                     <ListingCard key={listing.slug} listing={listing} />
@@ -284,13 +274,19 @@ export default function EspacesPage() {
               ) : (
                 <div className="flex flex-col items-center justify-center py-32 text-center">
                   <div
-                    className="font-display text-[64px] font-light text-dp-cream/10 mb-4"
+                    className="font-display text-[64px] font-light text-dp-cream/8 mb-4 leading-none"
                     style={{ fontFamily: "var(--font-display)" }}
                   >
                     0
                   </div>
-                  <div className="text-[18px] text-dp-cream/40 mb-2">Aucun espace trouvé</div>
-                  <div className="text-[14px] text-dp-cream/25">Modifiez vos critères de recherche</div>
+                  <p className="text-[18px] text-dp-cream/40 mb-2">Aucun espace trouvé</p>
+                  <p className="text-[14px] text-dp-cream/25 mb-6">Modifiez vos critères de recherche</p>
+                  <button
+                    onClick={resetFilters}
+                    className="px-5 py-2.5 rounded-full border border-dp-cream/20 text-dp-cream/60 text-[13px] hover:border-dp-cream/40 hover:text-dp-cream transition-colors"
+                  >
+                    Réinitialiser les filtres
+                  </button>
                 </div>
               )}
             </div>
@@ -301,20 +297,15 @@ export default function EspacesPage() {
       {/* Mobile filter drawer */}
       {showFilters && (
         <>
-          {/* Backdrop */}
           <div
             className="fixed inset-0 bg-dp-abyss/75 backdrop-blur-sm z-40 lg:hidden"
             onClick={() => setShowFilters(false)}
           />
-          {/* Panel */}
           <div className="fixed bottom-0 left-0 right-0 z-50 lg:hidden bg-dp-deep rounded-t-3xl border-t border-dp-cream/10 max-h-[88vh] overflow-y-auto">
-            {/* Handle */}
             <div className="flex justify-center pt-4 pb-2">
               <div className="w-10 h-1 rounded-full bg-dp-cream/20" />
             </div>
-
             <div className="px-6 pb-8">
-              {/* Header */}
               <div className="flex justify-between items-center mb-7">
                 <span
                   className="text-[17px] font-semibold text-dp-cream tracking-tight"
@@ -329,13 +320,11 @@ export default function EspacesPage() {
                   <CloseIcon />
                 </button>
               </div>
-
               {FilterContent}
-
-              {/* Apply */}
               <button
                 onClick={() => setShowFilters(false)}
-                className="w-full mt-8 py-4 bg-dp-orange text-dp-abyss font-semibold text-[14px] rounded-2xl transition-all hover:shadow-[0_8px_32px_rgba(255,107,53,0.35)]"
+                className="w-full mt-8 py-4 bg-dp-orange text-dp-abyss font-semibold text-[14px] rounded-2xl transition-all hover:opacity-90"
+                style={{ boxShadow: "0 6px 24px rgba(255,107,53,0.35)" }}
               >
                 Afficher {filtered.length} espace{filtered.length > 1 ? "s" : ""}
               </button>
@@ -346,5 +335,33 @@ export default function EspacesPage() {
 
       <Footer />
     </>
+  );
+}
+
+export default function EspacesPage() {
+  return (
+    <Suspense>
+      <EspacesContent />
+    </Suspense>
+  );
+}
+
+function FiltersIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="4" y1="21" x2="4" y2="14" /><line x1="4" y1="10" x2="4" y2="3" />
+      <line x1="12" y1="21" x2="12" y2="12" /><line x1="12" y1="8" x2="12" y2="3" />
+      <line x1="20" y1="21" x2="20" y2="16" /><line x1="20" y1="12" x2="20" y2="3" />
+      <line x1="1" y1="14" x2="7" y2="14" /><line x1="9" y1="8" x2="15" y2="8" />
+      <line x1="17" y1="16" x2="23" y2="16" />
+    </svg>
+  );
+}
+
+function CloseIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
   );
 }

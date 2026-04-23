@@ -1,154 +1,60 @@
-const listings = [
-  {
-    badge: "Nouveau",
-    title: "Garage individuel sécurisé",
-    location: "Marseille 8e · Prado",
-    rating: "4.9",
-    features: ["18 m²", "Caméra", "Couvert"],
-    price: "120€",
-    gradient:
-      "radial-gradient(circle at 30% 30%, rgba(255,107,53,0.2) 0%, transparent 50%), linear-gradient(135deg, #0A2540 0%, #14385C 100%)",
-  },
-  {
-    badge: "Camping-car",
-    title: "Terrain clôturé 80m²",
-    location: "Aubagne · Zone résidentielle",
-    rating: "4.8",
-    features: ["80 m²", "Clôturé", "24/7"],
-    price: "180€",
-    gradient:
-      "radial-gradient(circle at 70% 70%, rgba(255,107,53,0.35) 0%, transparent 55%), linear-gradient(135deg, #061A2F 0%, #2A5580 100%)",
-  },
-  {
-    badge: "Populaire",
-    title: "Box de stockage premium",
-    location: "Cassis · Accès direct",
-    rating: "5.0",
-    features: ["12 m²", "Alarme", "Sec"],
-    price: "95€",
-    gradient:
-      "radial-gradient(circle at 50% 50%, rgba(233,221,205,0.3) 0%, transparent 60%), linear-gradient(135deg, #14385C 0%, #061A2F 100%)",
-  },
-];
-
-function StarIcon() {
-  return (
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="#FF6B35">
-      <polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9" />
-    </svg>
-  );
-}
-
-function HeartIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0A2540" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-    </svg>
-  );
-}
+import Link from "next/link";
+import { listings } from "@/lib/data";
+import ListingCard from "./ListingCard";
 
 export default function Listings() {
+  const featured = listings.slice(0, 3);
+
   return (
     <section className="py-24 bg-dp-deep">
       <div className="max-w-[1400px] mx-auto px-8">
-        <div className="mb-12">
-          <div
-            className="text-[11px] text-dp-orange tracking-[0.2em] uppercase mb-5"
-            style={{ fontFamily: "var(--font-mono)" }}
-          >
-            03 — Espaces disponibles
+
+        {/* Header */}
+        <div className="flex items-end justify-between gap-6 mb-12">
+          <div>
+            <div
+              className="text-[11px] text-dp-orange tracking-[0.2em] uppercase mb-5"
+              style={{ fontFamily: "var(--font-mono)" }}
+            >
+              03 — Espaces disponibles
+            </div>
+            <h2
+              className="font-display font-light tracking-[-0.03em] leading-[0.95] text-dp-cream"
+              style={{
+                fontFamily: "var(--font-display)",
+                fontSize: "clamp(26px, 3vw, 44px)",
+              }}
+            >
+              Les annonces,<br />
+              <em className="text-dp-orange not-italic italic font-normal">éditoriales.</em>
+            </h2>
           </div>
-          <h2
-            className="font-display font-light tracking-[-0.03em] leading-[0.95] text-dp-cream mb-4"
-            style={{
-              fontFamily: "var(--font-display)",
-              fontSize: "clamp(26px, 3vw, 44px)",
-            }}
+          <Link
+            href="/espaces"
+            className="hidden md:flex items-center gap-2 text-[13px] font-medium text-dp-cream/50 hover:text-dp-cream transition-colors flex-shrink-0 group"
           >
-            Les annonces,<br />
-            <em className="text-dp-orange not-italic italic font-normal">éditoriales.</em>
-          </h2>
-          <p className="text-[14px] text-dp-cream/55 max-w-[480px] leading-[1.7]">
-            Chaque espace raconte une opportunité. On ne vend pas du parking — on vend du potentiel.
-          </p>
+            Voir tous les espaces
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-200 group-hover:translate-x-0.5">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {listings.map((l) => (
-            <div
-              key={l.title}
-              className="bg-dp-cream rounded-2xl overflow-hidden cursor-pointer group transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_24px_64px_rgba(6,26,47,0.30)]"
-            >
-              {/* Image */}
-              <div
-                className="aspect-[4/3] relative"
-                style={{ background: l.gradient }}
-              >
-                <div className="absolute top-4 left-4 right-4 flex justify-between items-center z-10">
-                  <span
-                    className="px-3 py-1 rounded-full text-[10px] font-medium tracking-[0.12em] uppercase bg-dp-cream/95 text-dp-deep backdrop-blur-md"
-                    style={{ fontFamily: "var(--font-mono)" }}
-                  >
-                    {l.badge}
-                  </span>
-                  <button className="w-8 h-8 rounded-full bg-dp-cream/95 backdrop-blur-md flex items-center justify-center hover:scale-105 transition-transform border-0">
-                    <HeartIcon />
-                  </button>
-                </div>
-              </div>
-
-              {/* Content */}
-              <div className="p-5">
-                <div className="flex justify-between items-start gap-3 mb-1.5">
-                  <h3
-                    className="font-display text-[17px] font-medium text-dp-deep leading-snug tracking-tight"
-                    style={{ fontFamily: "var(--font-display)" }}
-                  >
-                    {l.title}
-                  </h3>
-                  <div className="flex items-center gap-1 text-[12px] font-semibold text-dp-deep whitespace-nowrap">
-                    <StarIcon />
-                    {l.rating}
-                  </div>
-                </div>
-
-                <div className="text-[12px] text-dp-deep/50 mb-4">{l.location}</div>
-
-                <div className="flex flex-wrap gap-1.5 mb-4">
-                  {l.features.map((f) => (
-                    <span
-                      key={f}
-                      className="px-2.5 py-1 rounded-full text-[10px] font-medium tracking-[0.06em] uppercase bg-dp-deep/10 text-dp-deep"
-                      style={{ fontFamily: "var(--font-mono)" }}
-                    >
-                      {f}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="flex justify-between items-center pt-4 border-t border-dp-deep/12">
-                  <div className="flex items-baseline gap-1">
-                    <span
-                      className="font-display text-[24px] font-normal text-dp-orange tracking-tight"
-                      style={{ fontFamily: "var(--font-display)" }}
-                    >
-                      {l.price}
-                    </span>
-                    <span className="text-[11px] text-dp-deep/40">/ mois</span>
-                  </div>
-                  <button className="px-4 py-2 rounded-full bg-dp-deep text-dp-cream text-[11px] font-medium transition-all duration-200 group-hover:bg-dp-orange group-hover:text-dp-abyss">
-                    Réserver
-                  </button>
-                </div>
-              </div>
-            </div>
+        {/* Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {featured.map((listing) => (
+            <ListingCard key={listing.slug} listing={listing} />
           ))}
         </div>
 
-        <div className="mt-10 text-center">
-          <button className="px-7 py-3.5 rounded-full border border-dp-cream/20 text-dp-cream text-[13px] font-medium hover:border-dp-cream/45 transition-all duration-300">
+        {/* Mobile CTA */}
+        <div className="mt-10 text-center md:hidden">
+          <Link
+            href="/espaces"
+            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full border border-dp-cream/20 text-dp-cream text-[13px] font-medium hover:border-dp-cream/45 transition-all duration-300"
+          >
             Voir tous les espaces
-          </button>
+          </Link>
         </div>
       </div>
     </section>

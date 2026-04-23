@@ -1,3 +1,5 @@
+import SearchBar from "./SearchBar";
+
 export default function Hero() {
   return (
     <section
@@ -9,7 +11,7 @@ export default function Hero() {
     >
       {/* Vertical accent line */}
       <div
-        className="absolute top-[15%] -left-[5%] w-px h-[70%] opacity-30"
+        className="absolute top-[15%] -left-[5%] w-px h-[70%] opacity-25"
         style={{
           background: "linear-gradient(180deg, transparent, #FF6B35, transparent)",
           transform: "rotate(-15deg)",
@@ -17,10 +19,10 @@ export default function Hero() {
       />
 
       <div className="max-w-[1400px] mx-auto px-8 w-full relative z-10">
-        <div className="max-w-[820px]">
+        <div className="max-w-[860px]">
 
           {/* Eyebrow */}
-          <div className="animate-fade-up inline-flex items-center gap-3 px-4 py-2 rounded-full border border-dp-orange/30 bg-dp-orange/8 mb-7">
+          <div className="animate-fade-up inline-flex items-center gap-3 px-4 py-2 rounded-full border border-dp-orange/25 bg-dp-orange/8 mb-7">
             <span className="w-1.5 h-1.5 rounded-full bg-dp-orange animate-pulse-dot" />
             <span
               className="text-[11px] font-medium tracking-[0.2em] uppercase text-dp-orange"
@@ -32,7 +34,7 @@ export default function Hero() {
 
           {/* H1 */}
           <h1
-            className="animate-fade-up animate-delay-100 font-display font-light tracking-[-0.04em] leading-[0.93] mb-8"
+            className="animate-fade-up animate-delay-100 font-display font-light tracking-[-0.04em] leading-[0.93] mb-6"
             style={{
               fontFamily: "var(--font-display)",
               fontSize: "clamp(36px, 4.5vw, 64px)",
@@ -44,24 +46,20 @@ export default function Hero() {
           </h1>
 
           {/* Baseline */}
-          <div className="animate-fade-up animate-delay-200 mb-9 max-w-[500px]">
-            <p className="text-[15px] text-dp-cream/60 leading-[1.7]">
-              Garage, box, parking, terrain — transformez ce qui dort chez vous
-              en source de revenus récurrents. Mise en relation, paiement sécurisé, gestion automatisée.
-            </p>
-          </div>
+          <p className="animate-fade-up animate-delay-200 text-[15px] text-dp-cream/55 leading-[1.75] max-w-[480px] mb-9">
+            Garage, box, parking, terrain — transformez ce qui dort chez vous
+            en revenus récurrents. Paiement sécurisé, gestion automatisée.
+          </p>
 
-          {/* CTAs */}
-          <div className="animate-fade-up animate-delay-200 flex flex-wrap gap-3 mb-12">
-            <button
-              className="px-7 py-3.5 bg-dp-orange text-dp-abyss font-semibold text-[14px] rounded-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_40px_rgba(255,107,53,0.45)]"
-              style={{ boxShadow: "0 6px 24px rgba(255,107,53,0.30)" }}
+          {/* Search bar */}
+          <div className="animate-fade-up animate-delay-200 mb-12">
+            <SearchBar className="max-w-[720px]" />
+            <p
+              className="mt-3 ml-1 text-[11px] text-dp-cream/30 tracking-[0.12em]"
+              style={{ fontFamily: "var(--font-mono)" }}
             >
-              Proposer mon espace →
-            </button>
-            <button className="px-7 py-3.5 bg-transparent text-dp-cream font-medium text-[14px] rounded-full border border-dp-cream/20 hover:border-dp-cream/50 transition-all duration-300">
-              Chercher un espace
-            </button>
+              Essayez : Marseille · Garage · 150€ max
+            </p>
           </div>
 
           {/* Stats */}
@@ -73,7 +71,7 @@ export default function Hero() {
             ].map(({ value, label }) => (
               <div key={label}>
                 <div
-                  className="font-display text-[32px] font-light text-dp-orange tracking-tight leading-none mb-1.5"
+                  className="font-display text-[32px] font-light text-dp-orange tracking-tight leading-none mb-2"
                   style={{ fontFamily: "var(--font-display)" }}
                 >
                   {value}
@@ -122,8 +120,8 @@ export default function Hero() {
           <div className="flex items-center gap-3 mb-3">
             <div className="w-7 h-7 rounded-full bg-dp-orange/20 border border-dp-orange/30 flex items-center justify-center flex-shrink-0">
               <svg width="12" height="12" fill="none" stroke="#FF6B35" strokeWidth="2" viewBox="0 0 24 24">
-                <path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
-                <circle cx="12" cy="12" r="2"/>
+                <path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z" />
+                <circle cx="12" cy="12" r="2" />
               </svg>
             </div>
             <div>

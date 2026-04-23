@@ -1,28 +1,32 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
+import SearchBar from "./SearchBar";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => setScrolled(window.scrollY > 80);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      className={[
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
         scrolled
-          ? "bg-dp-abyss/95 backdrop-blur-xl border-b border-white/5"
-          : "bg-transparent"
-      }`}
+          ? "bg-dp-abyss/96 backdrop-blur-xl border-b border-white/5 shadow-[0_4px_32px_rgba(6,26,47,0.4)]"
+          : "bg-transparent",
+      ].join(" ")}
     >
-      <div className="max-w-[1400px] mx-auto px-8 h-20 flex items-center justify-between">
+      <div className="max-w-[1400px] mx-auto px-8 h-20 flex items-center gap-6">
+
         {/* Logo */}
-        <a href="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 flex-shrink-0">
+        <Link href="/" className="flex items-center gap-3 flex-shrink-0 group">
+          <div className="w-9 h-9 flex-shrink-0 transition-transform duration-200 group-hover:scale-105">
             <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect width="40" height="40" rx="10" fill="#0A2540" />
               <path
@@ -37,42 +41,63 @@ export default function Navbar() {
             </svg>
           </div>
           <span
-            className="font-display text-[22px] font-medium tracking-tight text-dp-cream"
+            className={[
+              "font-display font-medium tracking-tight text-dp-cream transition-all duration-300",
+              scrolled ? "text-[18px]" : "text-[22px]",
+            ].join(" ")}
             style={{ fontFamily: "var(--font-display)" }}
           >
             DwellPark
           </span>
-        </a>
+        </Link>
 
-        {/* Links */}
-        <div className="hidden md:flex items-center gap-10">
+        {/* Compact search bar — visible on scroll */}
+        <div
+          className={[
+            "flex-1 max-w-[500px] mx-auto transition-all duration-300",
+            scrolled ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-2 pointer-events-none",
+          ].join(" ")}
+        >
+          <SearchBar compact />
+        </div>
+
+        {/* Nav links — hidden on scroll */}
+        <div
+          className={[
+            "hidden md:flex items-center gap-8 flex-shrink-0 transition-all duration-300",
+            scrolled ? "opacity-0 pointer-events-none w-0 overflow-hidden" : "opacity-100",
+          ].join(" ")}
+        >
           {[
             { label: "Louer un espace", href: "/espaces" },
             { label: "Mettre en location", href: "/publier" },
             { label: "Comment ça marche", href: "/#how-it-works" },
-            { label: "Tarifs", href: "/#tarifs" },
           ].map(({ label, href }) => (
-            <a
+            <Link
               key={label}
               href={href}
-              className="text-sm font-medium text-dp-cream/60 hover:text-dp-cream transition-colors duration-200"
+              className="text-[13px] font-medium text-dp-cream/55 hover:text-dp-cream transition-colors duration-200 whitespace-nowrap"
             >
               {label}
-            </a>
+            </Link>
           ))}
         </div>
 
-        {/* CTA */}
-        <div className="flex items-center gap-4">
-          <a href="#" className="hidden md:block text-sm font-medium text-dp-cream/60 hover:text-dp-cream transition-colors">
-            Se connecter
-          </a>
-          <a
+        {/* Right CTA */}
+        <div className="flex items-center gap-3 flex-shrink-0 ml-auto">
+          <Link
             href="#"
-            className="px-5 py-2.5 bg-dp-orange text-dp-abyss text-sm font-semibold rounded-full hover:opacity-90 transition-all duration-200 hover:-translate-y-px"
+            className="hidden md:block text-[13px] font-medium text-dp-cream/55 hover:text-dp-cream transition-colors whitespace-nowrap"
+          >
+            Se connecter
+          </Link>
+          <Link
+            href="/publier"
+            className="px-5 py-2.5 bg-dp-orange text-dp-abyss text-[13px] font-semibold rounded-full hover:opacity-90 transition-all duration-200 hover:-translate-y-px whitespace-nowrap"
+            style={{ boxShadow: scrolled ? "0 4px 16px rgba(255,107,53,0.35)" : "none" }}
           >
             Proposer mon espace
-          </a>
+          </Link>
         </div>
       </div>
     </nav>
