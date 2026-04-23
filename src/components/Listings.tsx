@@ -51,7 +51,7 @@ export default function Listings() {
   return (
     <section className="py-36 bg-dp-deep">
       <div className="max-w-[1400px] mx-auto px-8">
-        <div className="mb-24">
+        <div className="mb-16">
           <div
             className="text-[11px] text-dp-orange tracking-[0.2em] uppercase mb-6"
             style={{ fontFamily: "var(--font-mono)" }}
@@ -59,10 +59,10 @@ export default function Listings() {
             03 — Espaces disponibles
           </div>
           <h2
-            className="font-display font-light tracking-[-0.03em] leading-[0.95] text-dp-cream mb-8"
+            className="font-display font-light tracking-[-0.03em] leading-[0.95] text-dp-cream mb-6"
             style={{
               fontFamily: "var(--font-display)",
-              fontSize: "clamp(48px, 7vw, 88px)",
+              fontSize: "clamp(40px, 5.5vw, 72px)",
             }}
           >
             Les annonces,<br />
@@ -118,7 +118,7 @@ export default function Listings() {
                   {l.features.map((f) => (
                     <span
                       key={f}
-                      className="px-3 py-1 rounded-full text-[10px] font-medium tracking-[0.08em] uppercase bg-dp-deep/5 text-dp-deep"
+                      className="px-3 py-1 rounded-full text-[10px] font-medium tracking-[0.08em] uppercase bg-dp-deep/10 text-dp-deep"
                       style={{ fontFamily: "var(--font-mono)" }}
                     >
                       {f}
@@ -126,7 +126,7 @@ export default function Listings() {
                   ))}
                 </div>
 
-                <div className="flex justify-between items-center pt-5 border-t border-dp-deep/8">
+                <div className="flex justify-between items-center pt-5 border-t border-dp-deep/12">
                   <div className="flex items-baseline gap-1">
                     <span
                       className="font-display text-[30px] font-normal text-dp-orange tracking-tight"

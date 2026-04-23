@@ -19,7 +19,7 @@ export default function Hero() {
       <div className="max-w-[1400px] mx-auto px-8 w-full relative z-10">
         <div className="max-w-[900px]">
           {/* Eyebrow */}
-          <div className="animate-fade-up inline-flex items-center gap-3 px-4 py-2 rounded-full border border-dp-orange/30 bg-dp-orange/8 mb-14">
+          <div className="animate-fade-up inline-flex items-center gap-3 px-4 py-2 rounded-full border border-dp-orange/30 bg-dp-orange/8 mb-8">
             <span className="w-1.5 h-1.5 rounded-full bg-dp-orange animate-pulse-dot" />
             <span
               className="text-[11px] font-medium tracking-[0.2em] uppercase text-dp-orange"
@@ -31,10 +31,10 @@ export default function Hero() {
 
           {/* H1 */}
           <h1
-            className="animate-fade-up animate-delay-100 font-display font-light tracking-[-0.04em] leading-[0.88] mb-14"
+            className="animate-fade-up animate-delay-100 font-display font-light tracking-[-0.04em] leading-[0.92] mb-10"
             style={{
               fontFamily: "var(--font-display)",
-              fontSize: "clamp(72px, 11vw, 160px)",
+              fontSize: "clamp(52px, 7vw, 108px)",
             }}
           >
             <span className="text-dp-cream block">Vos espaces</span>
@@ -43,9 +43,9 @@ export default function Hero() {
           </h1>
 
           {/* Baseline */}
-          <div className="animate-fade-up animate-delay-200 mb-16 max-w-[600px]">
+          <div className="animate-fade-up animate-delay-200 mb-10 max-w-[600px]">
             <p
-              className="text-[19px] text-dp-cream/65 leading-relaxed"
+              className="text-[17px] text-dp-cream/65 leading-relaxed"
             >
               Garage, box, parking, terrain — transformez ce qui dort chez vous en source
               de revenus récurrents. Mise en relation, paiement sécurisé, gestion automatisée.
@@ -53,7 +53,7 @@ export default function Hero() {
           </div>
 
           {/* CTAs */}
-          <div className="animate-fade-up animate-delay-200 flex flex-wrap gap-4 mb-20">
+          <div className="animate-fade-up animate-delay-200 flex flex-wrap gap-4 mb-14">
             <button
               className="px-8 py-4 bg-dp-orange text-dp-abyss font-semibold text-[15px] rounded-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_40px_rgba(255,107,53,0.45)]"
               style={{ boxShadow: "0 8px 32px rgba(255,107,53,0.35)" }}

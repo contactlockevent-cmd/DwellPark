@@ -21,7 +21,7 @@ export default function CTA() {
           className="font-display font-light tracking-[-0.04em] leading-[0.92] text-dp-cream mb-10"
           style={{
             fontFamily: "var(--font-display)",
-            fontSize: "clamp(52px, 8vw, 100px)",
+            fontSize: "clamp(44px, 6vw, 84px)",
           }}
         >
           Votre espace dort.<br />

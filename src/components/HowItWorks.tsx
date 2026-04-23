@@ -23,7 +23,7 @@ export default function HowItWorks() {
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-20 bg-gradient-to-b from-dp-orange/0 via-dp-orange/50 to-dp-orange/0" />
 
       <div className="max-w-[1400px] mx-auto px-8">
-        <div className="mb-24">
+        <div className="mb-16">
           <div
             className="text-[11px] text-dp-orange tracking-[0.2em] uppercase mb-6"
             style={{ fontFamily: "var(--font-mono)" }}
@@ -31,10 +31,10 @@ export default function HowItWorks() {
             02 — Comment ça marche
           </div>
           <h2
-            className="font-display font-light tracking-[-0.03em] leading-[0.95] text-dp-cream mb-8"
+            className="font-display font-light tracking-[-0.03em] leading-[0.95] text-dp-cream mb-6"
             style={{
               fontFamily: "var(--font-display)",
-              fontSize: "clamp(48px, 7vw, 88px)",
+              fontSize: "clamp(40px, 5.5vw, 72px)",
             }}
           >
             Trois étapes.<br />
