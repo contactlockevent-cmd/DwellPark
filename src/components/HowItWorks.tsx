@@ -18,57 +18,55 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <section className="py-36 bg-dp-abyss relative overflow-hidden">
-      {/* Top border accent */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-20 bg-gradient-to-b from-dp-orange/0 via-dp-orange/50 to-dp-orange/0" />
+    <section className="py-24 bg-dp-abyss relative overflow-hidden">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-16 bg-gradient-to-b from-transparent via-dp-orange/40 to-transparent" />
 
       <div className="max-w-[1400px] mx-auto px-8">
-        <div className="mb-16">
+        <div className="mb-12">
           <div
-            className="text-[11px] text-dp-orange tracking-[0.2em] uppercase mb-6"
+            className="text-[11px] text-dp-orange tracking-[0.2em] uppercase mb-5"
             style={{ fontFamily: "var(--font-mono)" }}
           >
             02 — Comment ça marche
           </div>
           <h2
-            className="font-display font-light tracking-[-0.03em] leading-[0.95] text-dp-cream mb-6"
+            className="font-display font-light tracking-[-0.03em] leading-[0.95] text-dp-cream mb-4"
             style={{
               fontFamily: "var(--font-display)",
-              fontSize: "clamp(40px, 5.5vw, 72px)",
+              fontSize: "clamp(26px, 3vw, 44px)",
             }}
           >
             Trois étapes.<br />
             <em className="text-dp-orange not-italic italic font-normal">C'est tout.</em>
           </h2>
-          <p className="text-[19px] text-dp-cream/60 max-w-[560px] leading-relaxed">
+          <p className="text-[14px] text-dp-cream/55 max-w-[480px] leading-[1.7]">
             Pas de paperasse, pas de démarches complexes. DwellPark s'occupe de tout —
             vous gardez le contrôle.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {steps.map(({ n, title, desc }) => (
             <div
               key={n}
-              className="relative p-10 rounded-3xl border border-dp-cream/8 backdrop-blur-xl group hover:border-dp-orange/30 transition-all duration-500"
-              style={{ background: "rgba(20,56,92,0.25)" }}
+              className="relative p-8 rounded-2xl border border-dp-cream/8 group hover:border-dp-orange/25 transition-all duration-500"
+              style={{ background: "rgba(20,56,92,0.20)" }}
             >
-              {/* Top line on hover */}
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-dp-orange/50 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-500 rounded-full" />
+              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-dp-orange/40 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
 
               <div
-                className="font-display text-[72px] font-light leading-none text-dp-orange/20 mb-8 tracking-tight"
+                className="font-display text-[48px] font-light leading-none text-dp-orange/18 mb-6 tracking-tight"
                 style={{ fontFamily: "var(--font-display)" }}
               >
                 {n}
               </div>
               <h3
-                className="font-display text-[24px] font-normal text-dp-cream tracking-tight mb-4"
+                className="font-display text-[18px] font-normal text-dp-cream tracking-tight mb-3"
                 style={{ fontFamily: "var(--font-display)" }}
               >
                 {title}
               </h3>
-              <p className="text-[15px] text-dp-cream/60 leading-relaxed">{desc}</p>
+              <p className="text-[13px] text-dp-cream/55 leading-[1.7]">{desc}</p>
             </div>
           ))}
         </div>

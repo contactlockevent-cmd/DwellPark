@@ -66,21 +66,21 @@ export default function EspacesPage() {
 
       {/* Search hero */}
       <div
-        className="pt-32 pb-16 relative"
+        className="pt-28 pb-12 relative"
         style={{
-          background: "radial-gradient(ellipse at top, rgba(42,85,128,0.2) 0%, transparent 65%), linear-gradient(180deg, #061A2F 0%, #0A2540 100%)",
+          background: "radial-gradient(ellipse at top, rgba(42,85,128,0.18) 0%, transparent 65%), linear-gradient(180deg, #061A2F 0%, #0A2540 100%)",
         }}
       >
         <div className="max-w-[1400px] mx-auto px-8">
           <div
-            className="text-[11px] text-dp-orange tracking-[0.2em] uppercase mb-5"
+            className="text-[11px] text-dp-orange tracking-[0.2em] uppercase mb-4"
             style={{ fontFamily: "var(--font-mono)" }}
           >
             Marseille · PACA · Méditerranée
           </div>
           <h1
-            className="font-display font-light tracking-[-0.04em] leading-[0.92] text-dp-cream mb-10"
-            style={{ fontFamily: "var(--font-display)", fontSize: "clamp(40px, 6vw, 72px)" }}
+            className="font-display font-light tracking-[-0.04em] leading-[0.93] text-dp-cream mb-8"
+            style={{ fontFamily: "var(--font-display)", fontSize: "clamp(28px, 3.5vw, 48px)" }}
           >
             Trouver un espace<br />
             <em className="text-dp-orange not-italic italic font-normal">près de chez vous.</em>
