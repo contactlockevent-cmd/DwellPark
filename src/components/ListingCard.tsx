@@ -54,7 +54,7 @@ export default function ListingCard({ listing }: { listing: Listing }) {
 
         {/* Content */}
         <div className="p-6">
-          <div className="flex justify-between items-start gap-3 mb-1">
+          <div className="flex justify-between items-start gap-3 mb-2">
             <h3
               className="font-display text-[19px] font-medium text-dp-deep leading-snug tracking-tight"
               style={{ fontFamily: "var(--font-display)" }}
@@ -73,7 +73,7 @@ export default function ListingCard({ listing }: { listing: Listing }) {
             {listing.features.slice(0, 3).map((f) => (
               <span
                 key={f}
-                className="px-3 py-1 rounded-full text-[10px] font-medium tracking-[0.08em] uppercase bg-dp-deep/5 text-dp-deep"
+                className="px-3 py-1 rounded-full text-[10px] font-medium tracking-[0.08em] uppercase bg-dp-deep/10 text-dp-deep"
                 style={{ fontFamily: "var(--font-mono)" }}
               >
                 {f}
@@ -81,7 +81,7 @@ export default function ListingCard({ listing }: { listing: Listing }) {
             ))}
           </div>
 
-          <div className="flex justify-between items-center pt-4 border-t border-dp-deep/8">
+          <div className="flex justify-between items-center pt-4 border-t border-dp-deep/12">
             <div className="flex items-baseline gap-1">
               <span
                 className="font-display text-[28px] font-normal text-dp-orange tracking-tight"

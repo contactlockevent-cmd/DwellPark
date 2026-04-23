@@ -138,7 +138,7 @@ export default function EspacesPage() {
                         className={`w-full text-left px-4 py-3 rounded-xl text-[14px] font-medium transition-all duration-200 border ${
                           selectedTypes.includes(type)
                             ? "bg-dp-orange/10 border-dp-orange/40 text-dp-orange"
-                            : "bg-dp-ocean/20 border-dp-cream/8 text-dp-cream/70 hover:border-dp-cream/20"
+                            : "bg-dp-ocean/20 border-dp-cream/15 text-dp-cream/70 hover:border-dp-cream/30"
                         }`}
                       >
                         {type}
@@ -199,7 +199,7 @@ export default function EspacesPage() {
                     <span className="text-dp-cream font-semibold">{filtered.length}</span> espace{filtered.length > 1 ? "s" : ""} disponible{filtered.length > 1 ? "s" : ""}
                   </span>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 text-dp-cream/60">
                   <SlidersIcon />
                   <select
                     value={sortBy}
